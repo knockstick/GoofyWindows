@@ -93,16 +93,34 @@ class Jumpscare:
         self.photo = ImageTk.PhotoImage(jumpscare_img)
         self.canvas.create_image(0, 0, image=self.photo, anchor='nw')
 
-        try:
-            jumpscare_sound = pygame.mixer.Sound(resource_path(ASSETS['jumpscare_sound']))
-            jumpscare_sound.play()
-
-            self.root.after(int(jumpscare_sound.get_length() * 1000), self.close)
-        except:
-            self.root.after(2000, self.close)
+        self.play_sound(ASSETS['jumpscare_sound'])
 
         self.root.mainloop()
     
+    def play_sound(self, sound_path):
+        try:
+            pygame.mixer.init()
+
+            if not pygame.mixer.get_init():
+                raise pygame.error("Failed to init mixer")
+
+            sound = pygame.mixer.Sound(sound_path)
+            sound.play()
+
+            duration = int(sound.get_length() * 1000)
+            self.root.after(duration, self.cleanup)
+        except Exception as e:
+            print(f"Failed to play sound: {e}")
+            self.root.after(2000, self.cleanup)
+
+    def cleanup(self):
+        try:
+            pygame.mixer.stop()
+            pygame.mixer.quit()
+        except:
+            pass
+        self.close()
+
     def close(self):
         self.root.destroy()
         sys.exit()
