@@ -125,7 +125,7 @@ class Jumpscare:
         self.root.destroy()
         sys.exit()
 
-class ScreenEffectsApp:
+class GoofyWindows:
     def __init__(self):
         pygame.mixer.init()
 
@@ -459,4 +459,4 @@ class ScreenEffectsApp:
         self.root.after(SETTINGS['frame_delay'], self.animate)
 
 if __name__ == "__main__":
-    app = ScreenEffectsApp()
+    app = GoofyWindows()
